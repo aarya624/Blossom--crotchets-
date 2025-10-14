@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Page 4 - Crochet Updates</title>
+  <title>Page 5 - Crochet Poll</title>
   <style>
     body {
       background-color: beige;
@@ -20,7 +20,6 @@
       max-width: 600px;
       border-radius: 10px;
       text-align: left;
-      position: relative;
       transition: background-color 0.5s ease;
     }
     .new-message {
@@ -70,52 +69,42 @@
       cursor: pointer;
       font-size: 16px;
     }
-    .comment-section {
-      margin-top: 20px;
-      text-align: left;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+    /* --- Poll Form Styling --- */
+    .poll-section {
       background-color: #fff0f5;
-      padding: 15px;
+      border: 2px solid hotpink;
       border-radius: 10px;
-      border: 1px solid hotpink;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      text-align: left;
     }
-    .comment {
-      background-color: #ffe4e1;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 10px;
-      position: relative;
+    .poll-section h2 {
+      color: hotpink;
+      text-align: center;
     }
-    .comment input, .comment textarea {
+    label {
+      font-weight: bold;
+      color: #444;
+    }
+    input[type="text"], select, textarea {
       width: 100%;
-      padding: 5px;
-      margin-bottom: 10px;
-      border-radius: 5px;
+      padding: 8px;
       border: 1px solid hotpink;
+      border-radius: 5px;
+      margin-top: 5px;
+      margin-bottom: 15px;
     }
-    .comment button {
-      width: 100%;
-      padding: 10px;
+    input[type="submit"] {
       background-color: hotpink;
       color: white;
       border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
       cursor: pointer;
-      border-radius: 5px;
     }
-    .comment button:hover {
+    input[type="submit"]:hover {
       background-color: deeppink;
-    }
-    .reply-box {
-      margin-top: 10px;
-      margin-left: 20px;
-    }
-    .reply {
-      background-color: #ffd6e0;
-      padding: 8px;
-      border-radius: 5px;
-      margin-top: 5px;
     }
   </style>
 </head>
@@ -143,7 +132,7 @@
   <div class="message-box">
     <div class="new-message">New Message</div>
     <p>
-      Just saying if you're looking for a new autumn vibes project the color combo beige and off white is great and warm! Ultimate duo.
+      Just saying if you're looking for a new autumn vibes project, the color combo beige and off white is great and warm! Ultimate duo.
     </p>
     <button class="read-btn">Mark as Read</button>
   </div>
@@ -156,21 +145,43 @@
     <button class="read-btn">Mark as Read</button>
   </div>
 
-  <!-- Comment Section -->
-  <div class="comment-section">
-    <h2>Leave a Comment</h2>
-    <div class="comment">
-      <input type="text" id="name" placeholder="Your Name">
-      <textarea id="comment" placeholder="Your Comment"></textarea>
-      <button id="submit-comment">Submit Comment</button>
-    </div>
-    <div id="comments-container"></div>
+  <!-- 🌸 Crochet Vote Form -->
+  <div class="poll-section">
+    <h2>🌸 Crochet Feedback Form 🌸</h2>
+    <p>Help Aarya know what you’d love to see next! 💕</p>
+
+    <form id="voteForm">
+      <label>Do you think I should sell my crochet projects?</label><br>
+      <select id="sellChoice" required>
+        <option value="">-- Select an option --</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+
+      <label>What type of projects do you prefer?</label><br>
+      <select id="projectType" required>
+        <option value="">-- Select a type --</option>
+        <option value="Plushies">Plushies</option>
+        <option value="Keychains">Keychains</option>
+        <option value="Home Decor">Home Decor</option>
+        <option value="Wearables">Wearables</option>
+      </select>
+
+      <label>What should my next video be about?</label><br>
+      <textarea id="nextVideo" rows="3" placeholder="Example: keychain tutorial or autumn decor..." required></textarea>
+
+      <label>Your Name</label>
+      <input type="text" id="voterName" placeholder="Enter your name" required>
+
+      <input type="submit" value="Submit Vote">
+    </form>
   </div>
 
-  <a href="page4.html"><button>Back to page 4</button></a>
+  <a href="page4.html"><button>Back to Page 4</button></a>
   <a href="page6.html"><button>Go to Page 6</button></a>
 
   <script>
+    // Mark messages as read
     function markMessageRead(messageBox, button) {
       const newMsg = messageBox.querySelector('.new-message');
       newMsg.style.animation = 'none';
@@ -196,41 +207,21 @@
       document.getElementById('mark-all').innerText = 'All Read';
     });
 
-    // Load comments from localStorage
-    function loadComments() {
-      const savedComments = JSON.parse(localStorage.getItem('comments')) || [];
-      const container = document.getElementById('comments-container');
-      container.innerHTML = '';
-      savedComments.forEach(comment => {
-        const div = document.createElement('div');
-        div.classList.add('comment');
-        div.innerHTML = `<strong>${comment.name}:</strong> ${comment.text}`;
-        container.appendChild(div);
-      });
-    }
+    // Handle vote form
+    document.getElementById('voteForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('voterName').value.trim();
+      const sellChoice = document.getElementById('sellChoice').value;
+      const projectType = document.getElementById('projectType').value;
+      const nextVideo = document.getElementById('nextVideo').value.trim();
 
-    // Save comments to localStorage
-    function saveComment(name, text) {
-      const savedComments = JSON.parse(localStorage.getItem('comments')) || [];
-      savedComments.push({ name, text });
-      localStorage.setItem('comments', JSON.stringify(savedComments));
-    }
-
-    // Add new comment
-    document.getElementById('submit-comment').addEventListener('click', () => {
-      const name = document.getElementById('name').value.trim();
-      const commentText = document.getElementById('comment').value.trim();
-      if(name && commentText) {
-        saveComment(name, commentText);
-        loadComments();
-        document.getElementById('name').value = '';
-        document.getElementById('comment').value = '';
+      if (name && sellChoice && projectType && nextVideo) {
+        alert("Thank you for voting, " + name + "! 💖 Your response has been recorded.");
+        this.reset();
       } else {
-        alert('Please enter both name and comment!');
+        alert("Please fill out all fields!");
       }
     });
-
-    loadComments();
   </script>
 </body>
 </html>
